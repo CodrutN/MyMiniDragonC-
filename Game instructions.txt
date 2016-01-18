@@ -1,0 +1,4 @@
+In this game you have to navigate our mini dragon past the obstacles.
+You do this by pressing up or down keys, which can be redefined.
+Each time you press the keys, the dragon flies up or down.
+Avoid the obstacles and the other dragons that may appear opposite of you.

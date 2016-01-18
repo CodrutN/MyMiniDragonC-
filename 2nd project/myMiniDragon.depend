@@ -1,0 +1,80 @@
+# depslib dependency file v1.0
+1447022859 source:e:\c\my mini dragon in c++ with sdl\source code\main.cpp
+	"SDL.h"
+	"SDL_image.h"
+	<SDL_mixer.h>
+	<string>
+	<stdlib.h>
+	"dragon.h"
+	"loader.h"
+	"timer.h"
+	"window.h"
+	"obstacles.h"
+	"game_functions.h"
+	"play.h"
+	"String_Input.h"
+
+1447082323 e:\c\my mini dragon in c++ with sdl\source code\dragon.h
+	"loader.h"
+	"obstacles.h"
+	"timer.h"
+
+1446378322 e:\c\my mini dragon in c++ with sdl\source code\loader.h
+	"SDL.h"
+	"SDL_image.h"
+	<string>
+	<iostream>
+	<sstream>
+	<SDL_mixer.h>
+	<SDL_ttf.h>
+	"constants.h"
+	"obstacles.h"
+	"variables.h"
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+
+1447082423 e:\c\my mini dragon in c++ with sdl\source code\constants.h
+
+1447083149 e:\c\my mini dragon in c++ with sdl\source code\obstacles.h
+	"constants.h"
+	"variables.h"
+
+1447082323 e:\c\my mini dragon in c++ with sdl\source code\variables.h
+
+1446376946 e:\c\my mini dragon in c++ with sdl\source code\timer.h
+
+1446122735 e:\c\my mini dragon in c++ with sdl\source code\window.h
+	"dragon.h"
+	"loader.h"
+
+1446643605 e:\c\my mini dragon in c++ with sdl\source code\game_functions.h
+	"dragon.h"
+	"Highscore.h"
+
+1447023651 e:\c\my mini dragon in c++ with sdl\source code\highscore.h
+	<iostream>
+	<conio.h>
+	<fstream>
+	<iomanip>
+	<string>
+	<cstdlib>
+	"String_Input.h"
+
+1446459072 e:\c\my mini dragon in c++ with sdl\source code\string_input.h
+	<string>
+	<SDL.h>
+	"variables.h"
+	"constants.h"
+
+1447084098 e:\c\my mini dragon in c++ with sdl\source code\play.h
+	"Bat.h"
+	<vector>
+
+1446379419 source:e:\c\my mini dragon in c++ with sdl\source code\timer.cpp
+	"timer.h"
+	<SDL.h>
+
+1447023651 e:\c\my mini dragon in c++ with sdl\source code\bat.h
+	"dragon.h"
+
