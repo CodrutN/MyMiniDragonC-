@@ -16,26 +16,27 @@ appreciated but is not required.
 misrepresented as being the original software.
 3. This notice may not be removed or altered from any source distribution. */
 
-#include "SDL.h"
-#include "SDL_image.h"
+#include <SDL.h>
+#include <SDL_image.h>
 #include <SDL_mixer.h>
-#include <string>
-#include <stdlib.h>
-#include "dragon.h"
+#include <SDL_ttf.h>
+
+
+#include "constants.h"
+#include "variables.h"
 #include "loader.h"
-#include "timer.h"
+
 #include "window.h"
-#include "obstacles.h"
 #include "game_functions.h"
 #include "play.h"
-#include "String_Input.h"
+
 
 
 
 int wmain(int argc, wchar_t *argv[]) {
 
     bool cont=true;
-    // init SDL
+    // init everything
     init();
     // welcome screen
     wel_come();

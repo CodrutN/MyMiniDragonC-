@@ -11,6 +11,7 @@
 
 //FUNCTION PROTOTYPE
 void processBackButton();
+void showTextAtPosition(std::string fontName, int fontSize, SDL_Color textColor, int x, int y, std::string str);
 
 class HighScore{
   private:

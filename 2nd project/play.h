@@ -1,57 +1,9 @@
-/* Copyright(c) 2014 - 2015 Codrut Niculescu
-
-This software is provided 'as-is', without any express or implied
-warranty.In no event will the authors be held liable for any damages
-arising from the use of this software.
-
-Permission is granted to anyone to use this software for any purpose,
-including commercial applications, and to alter it and redistribute it
-freely, subject to the following restrictions :
-
-1. The origin of this software must not be misrepresented; you must not
-claim that you wrote the original software.If you use this software
-in a product, an acknowledgment in the product documentation would be
-appreciated but is not required.
-2. Altered source versions must be plainly marked as such, and must not be
-misrepresented as being the original software.
-3. This notice may not be removed or altered from any source distribution. */
-
 #ifndef PLAY_H_INCLUDED
 #define PLAY_H_INCLUDED
 #include "Bat.h"
-#include <vector>
 
-//Render text at a specified position
-void showTextAtPosition(std::string fontName, int fontSize, SDL_Color textColor, int x, int y, std::string str){
-    SDL_Surface* renderText = nullptr;
-    TTF_Font* font = nullptr;
-    font = TTF_OpenFont( fontName.c_str(), fontSize );
-    if (font == nullptr){
-        printf("\nUnable to load the font file:  %s\n", TTF_GetError());
-        font = TTF_OpenFont( "Haunting Attraction.ttf", fontSize );     //opens default font
-    }
-     renderText = TTF_RenderText_Solid( font, str.c_str(), textColor );
-     apply_surface( x, y, renderText, screen );
-     SDL_UpdateWindowSurface(gameWindow);
-     SDL_FreeSurface(renderText);
-     TTF_CloseFont(font);
-}
-// WELCOME SCREEN
-void wel_come()
-{
-    Window welcomeWindow;
-    SDL_Surface* welcome = nullptr;
-    welcome=load_image(IMG_PATH + "welcome.png");
-    apply_surface(0,0,welcome,screen);
+#include "Bonus.h"
 
-    showTextAtPosition( "theHardwayRMX.ttf", 48, { 0x0, 0xFF, 0x0 }, SCREEN_WIDTH/2 - 300, SCREEN_HEIGHT/2, "MY MINI DRAGON" );
-    showTextAtPosition( "Haunting Attraction.ttf", 36, { 0x0, 0xFF, 0x0 }, SCREEN_WIDTH/2 - 220, SCREEN_HEIGHT/2+300, "a project for GAMELOFT" );
-    showTextAtPosition( "Haunting Attraction.ttf", 36, { 0xFF, 0x0, 0x0 }, SCREEN_WIDTH/2 - 200, SCREEN_HEIGHT/2+336, "by Codrut Niculescu" );
-
-    SDL_UpdateWindowSurface(gameWindow);
-    SDL_Delay(2000);
-    SDL_FreeSurface(welcome);
-}
 
 void play(){
     // init srand to generate random numbers used for obstacles
@@ -70,18 +22,22 @@ void play(){
     if( !load_files() ) return;
 
     Dragon myDragon;        //CREATING DRAGON CLASS OBJECT
-//    std::vector <Bat> bats;
-//    for (int i = 0; i<3; ++i){
-//        bats.push_back(Bat);
-//    }
-    Bat myBat;
+
+
+    Bat bats[3];
+    //std::vector <Bat> bats;
+    for (int i = 0; i<3; ++i){
+        bats[i] =  Bat();
+        //bats.push_back(Bat());
+    }
 
     Timer fps;               //CREATING TIMER CLASS OBJECT
 
     Obstacle obs;            //CREATING OBSTACLE CLASS OBJECT
-
-    //sets obstacles
     obs.setObstacles();
+
+    Bonus bonus;
+    bonus.setBonus();
     //The frame rate regulator
     int start_ticks;
     int calculate_ticks;
@@ -104,7 +60,6 @@ void play(){
 
             // Handle events for dragon
             myDragon.handle_input(game_paused);
-            myBat.handle_input(game_paused);
 
             if(event.type==SDL_KEYDOWN){
 
@@ -148,18 +103,23 @@ void play(){
         else if(fps.get_ticks() < 10000){
             bgX -=7;
             obs.moveObstacles(7);
+            bonus.moveBonus(7);
         }else if(fps.get_ticks()<40000){
             bgX-=10;
             obs.moveObstacles(10);
+            bonus.moveBonus(10);
         }else if(fps.get_ticks()<90000){
             bgX-=15;
             obs.moveObstacles(15);
+            bonus.moveBonus(15);
         }else if(fps.get_ticks()<120000){
             bgX-=20;
             obs.moveObstacles(20);
+            bonus.moveBonus(20);
         }else{
             bgX-=30;
             obs.moveObstacles(30);
+            bonus.moveBonus(30);
         }
 
         // IF THE LEVEL ENDED
@@ -183,7 +143,8 @@ void play(){
                     printf("\nUnable to load the background image:  %s\n", IMG_GetError());
                     return;
                 }
-
+            //sets bonus life
+            bonus.setBonus();
             //shows level no and sets a small delay
             ss.clear();
             ss.str("");
@@ -214,28 +175,47 @@ void play(){
         apply_surface( bgX + background->w, bgY, background, screen );
         // shows the obstacles
         obs.show();
+        //shows bonus
+        bonus.showBonus();
         //there is 1/1000 chances for the bat to show up
         int randomGen = rand() % 1000;
-        if (randomGen == 1 || myBat.isOnScreen){
-            myBat.moveDragon();
-            myBat.show();
-            if (check_collision(myBat.getCollisionBox(), myDragon.getCollisionBox())){
-                quit = true;
-                //save the score
-                currentScore = myDragon.get_score();
+        //if there is at least 1 bat on the screen then show it
+        if (randomGen == 1 || bats[0].isOnScreen){
+            if (!bats[0].isOnScreen) noOfBats = rand() % 3;
+                for (int j =0; j<= noOfBats; j++){
+                    //move the bat(s) on the screen
+                    bats[j].moveBird();
+                    bats[j].show();
+                    //check collision with the bats
+                    if (check_collision(bats[j].getCollisionBox(), myDragon.getCollisionBox())){
+                        if (myDragon.setLives(-1)) quit = true;
+                        //save the score
+                        currentScore = myDragon.get_score();
+                }
             }
         }
+        //bonus life?
+        if (check_collision(bonus.coordBox[0], myDragon.getCollisionBox())){
+                        myDragon.setLives(1);
+                        int xx = bonus.coordBox[0].x;
+                        int yy = bonus.coordBox[0].y;
+                        apply_surface( xx, yy, background, screen, &bonus.coordBox[0] );
+                        SDL_UpdateWindowSurface(gameWindow);
+                        SDL_Delay(500);
+                        //apply_surface(bonus.x,clip.y,highscoreImg,screen,&clip);
+                        bonus.deleteBonus();
+                }
         // moves & shows the dragon on the screen
-        myDragon.moveDragon();
+        myDragon.moveBird();
         myDragon.show();
         // displays time & score
-        update_screen(fps, myDragon.get_score());
+        update_screen(fps, myDragon);
         // updates the screen
         SDL_UpdateWindowSurface(gameWindow);
 
         // checks collision
         if ( myDragon.checkCollision(obs) ) {
-            quit = true;
+            if (myDragon.setLives(-1)) quit = true;
             //save the score
             currentScore = myDragon.get_score();
         }
@@ -254,6 +234,8 @@ void play(){
                    // SHOWS GAME OVER !
             showTextAtPosition( "theHardwayRMX.ttf", 36, { 0xFF, 0x0, 0x0 }, SCREEN_WIDTH/2 - 200, SCREEN_HEIGHT/2-100, " GAME OVER !" );
             SDL_Delay(2000);
+            //reset Dragon::yVel
+            Dragon::yVel = 5;
         if( background != nullptr ) SDL_FreeSurface( background );
         if( font != nullptr )   TTF_CloseFont( font );
         if( music != nullptr ) {Mix_HaltMusic(); Mix_FreeMusic( music );}

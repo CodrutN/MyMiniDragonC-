@@ -1,82 +1,14 @@
-/* Copyright(c) 2014 - 2015 Codrut Niculescu
+#ifndef OBSTACLES_H
+#define OBSTACLES_H
 
-This software is provided 'as-is', without any express or implied
-warranty.In no event will the authors be held liable for any damages
-arising from the use of this software.
-
-Permission is granted to anyone to use this software for any purpose,
-including commercial applications, and to alter it and redistribute it
-freely, subject to the following restrictions :
-
-1. The origin of this software must not be misrepresented; you must not
-claim that you wrote the original software.If you use this software
-in a product, an acknowledgment in the product documentation would be
-appreciated but is not required.
-2. Altered source versions must be plainly marked as such, and must not be
-misrepresented as being the original software.
-3. This notice may not be removed or altered from any source distribution. */
-
-#ifndef OBSTACLES_H_INCLUDED
-#define OBSTACLES_H_INCLUDED
 #include "constants.h"
 #include "variables.h"
-
+#include <string>
+#include <sstream>
+#include <iostream>
 using namespace constants;
 
-bool check_collision( const SDL_Rect& A, const SDL_Rect& B )
-{
-    //The sides of the rectangles
-    int leftA, leftB;
-    int rightA, rightB;
-    int topA, topB;
-    int bottomA, bottomB;
-
-    //Calculate the sides of rect A
-    leftA = A.x;
-    rightA = A.x + A.w;
-    topA = A.y;
-    bottomA = A.y + A.h;
-
-    //Calculate the sides of rect B
-    leftB = B.x;
-    rightB = B.x + B.w;
-    topB = B.y;
-    bottomB = B.y + B.h;
-
-    //If any of the sides from A are outside of B
-    if( bottomA <= topB ){
-        return false;
-    }
-
-    if( topA >= bottomB ){
-        return false;
-    }
-
-    if( rightA <= leftB ){
-        return false;
-    }
-
-    if( leftA >= rightB ){
-        return false;
-    }
-
-    //If none of the sides from A are outside B
-    return true;
-}
-
-void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip = NULL )
-{
-    //Holds offsets
-    SDL_Rect offset;
-
-    //Get offsets
-    offset.x = x;
-    offset.y = y;
-
-    //Blit
-    SDL_BlitSurface( source, clip, destination, &offset );
-
-}
+void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip = NULL );
 
 class Obstacle
 {
@@ -98,10 +30,12 @@ class Obstacle
 
 };
 
+
+
 Obstacle::Obstacle(){
     // ctor
 
-    //Load the dragon images
+    //Load the bird images
     std::ostringstream ss;          //stores the filenames for the obstacles images
     for (int i=0; i < NO_OF_OBSTACLES; ++i){
     ss.clear();
@@ -133,7 +67,7 @@ void Obstacle::setObstacles()
             if ((maxNoOfObstacles = levelWidth/500) > NO_OF_OBSTACLES){
                     maxNoOfObstacles = NO_OF_OBSTACLES;
             }
-            std::cout << maxNoOfObstacles << " ";
+            //std::cout << maxNoOfObstacles << " ";
 
             for(int i=0; i < maxNoOfObstacles; ++i){
                 // avoid to generate collision with an obstacle when

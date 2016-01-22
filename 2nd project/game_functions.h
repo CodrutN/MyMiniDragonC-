@@ -1,11 +1,100 @@
 #ifndef FUNCTIONS_H_INCLUDED
 #define FUNCTIONS_H_INCLUDED
-#include "dragon.h"
+
 #include "Highscore.h"
+#include "String_Input.h"
+#include "timer.h"
 
 //defined menu buttons position
 enum Buttons { PLAY = 200, OPTIONS = 270, HIGHSCORE = 340, INSTRUCTIONS = 410, CREDITS = 480, QUIT = 550 };
 
+// WELCOME SCREEN
+void wel_come()
+{
+    Window welcomeWindow;
+    SDL_Surface* welcome = nullptr;
+    welcome=load_image(IMG_PATH + "welcome.png");
+    apply_surface(0,0,welcome,screen);
+
+    showTextAtPosition( "theHardwayRMX.ttf", 48, { 0x0, 0xFF, 0x0 }, SCREEN_WIDTH/2 - 300, SCREEN_HEIGHT/2, "MY MINI DRAGON" );
+    showTextAtPosition( "Haunting Attraction.ttf", 36, { 0x0, 0xFF, 0x0 }, SCREEN_WIDTH/2 - 220, SCREEN_HEIGHT/2+300, "a project for GAMELOFT" );
+    showTextAtPosition( "Haunting Attraction.ttf", 36, { 0xFF, 0x0, 0x0 }, SCREEN_WIDTH/2 - 200, SCREEN_HEIGHT/2+336, "by Codrut Niculescu" );
+
+    SDL_UpdateWindowSurface(gameWindow);
+    SDL_Delay(2000);
+    SDL_FreeSurface(welcome);
+}
+
+//Render text at a specified position
+void showTextAtPosition(std::string fontName, int fontSize, SDL_Color textColor, int x, int y, std::string str){
+    SDL_Surface* renderText = nullptr;
+    TTF_Font* font = nullptr;
+    font = TTF_OpenFont( fontName.c_str(), fontSize );
+    if (font == nullptr){
+        printf("\nUnable to load the font file:  %s\n", TTF_GetError());
+        font = TTF_OpenFont( "Haunting Attraction.ttf", fontSize );     //opens default font
+    }
+     renderText = TTF_RenderText_Solid( font, str.c_str(), textColor );
+     apply_surface( x, y, renderText, screen );
+     SDL_UpdateWindowSurface(gameWindow);
+     SDL_FreeSurface(renderText);
+     TTF_CloseFont(font);
+}
+
+bool check_collision( const SDL_Rect& A, const SDL_Rect& B )
+{
+    //The sides of the rectangles
+    int leftA, leftB;
+    int rightA, rightB;
+    int topA, topB;
+    int bottomA, bottomB;
+
+    //Calculate the sides of rect A
+    leftA = A.x;
+    rightA = A.x + A.w;
+    topA = A.y;
+    bottomA = A.y + A.h;
+
+    //Calculate the sides of rect B
+    leftB = B.x;
+    rightB = B.x + B.w;
+    topB = B.y;
+    bottomB = B.y + B.h;
+
+    //If any of the sides from A are outside of B
+    if( bottomA <= topB ){
+        return false;
+    }
+
+    if( topA >= bottomB ){
+        return false;
+    }
+
+    if( rightA <= leftB ){
+        return false;
+    }
+
+    if( leftA >= rightB ){
+        return false;
+    }
+
+    //If none of the sides from A are outside B
+    return true;
+}
+
+void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip  )
+{
+    //Holds offsets
+    SDL_Rect offset;
+
+    //Get offsets
+    offset.x = x;
+    offset.y = y;
+
+    //Blit
+    SDL_BlitSurface( source, clip, destination, &offset );
+
+}
 //back button function
 void processBackButton(){
 
@@ -375,13 +464,13 @@ int game_menu()
     return choice;
 }
 
-void update_screen(Timer& TimE,int score)       //displays score and time
+void update_screen(Timer& TimE, Dragon& drag)       //displays score and time
 {
     std::stringstream ss;
     int a=TimE.get_ticks();
     if(a<60000)
         {
-           ss<< "SCORE: "<<score
+           ss<<"LIVES: "<< drag.getLives() << " SCORE: "<<drag.get_score()
            <<"  TIME: " << a/60000<<" : "<<a / 1000;
         }
         else
@@ -390,7 +479,7 @@ void update_screen(Timer& TimE,int score)       //displays score and time
             int min=0;
             min=sec/60;
             sec-=min*60;
-            ss<< "SCORE:  "<<score
+            ss<<"LIVES: "<< drag.getLives() << " SCORE:  "<<drag.get_score()
             << "    TIME: " << min<<" : "<<sec;
 
         }

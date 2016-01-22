@@ -25,6 +25,8 @@ int currentScore = 0;
 int lowestScore = 0;
 //max no of obstracles based on level width
 int maxNoOfObstacles = 0;
+//max no of bats showed in the same time
+int noOfBats = 0;
 
 //DEFINED KEYS
 namespace myDefKeys {

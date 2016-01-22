@@ -1,11 +1,6 @@
 #ifndef STRING_INPUT_H_INCLUDED
 #define STRING_INPUT_H_INCLUDED
 
-#include <string>
-#include <SDL.h>
-#include "variables.h"
-#include "constants.h"
-
 using namespace constants;
 
 //The key press interpreter
