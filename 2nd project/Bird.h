@@ -38,7 +38,7 @@ class Bird
         int score;
         // bird animation frames
         SDL_Surface *bird[NO_OF_DRAGON_FRAMES]= {nullptr};
-        SDL_Rect dragonBox; // bird collision box
+        SDL_Rect birdBox; // bird collision box
     private:
 };
 
@@ -101,13 +101,11 @@ bool Bird::checkCollision(Obstacle& obs){
     for(int i=0; i < maxNoOfObstacles; ++i){
 
         // If the bird went too far up or down or has collided with the obstacles
-        if( ( dragonBox.y < -DRAGON_HEIGHT ) || ( dragonBox.y + DRAGON_HEIGHT > SCREEN_HEIGHT ) || check_collision(dragonBox, obs.coordBox[i])){
-            apply_surface( obs.coordBox[i].x, obs.coordBox[i].y, background, screen, &obs.coordBox[i] );
-            SDL_UpdateWindowSurface(gameWindow);
+        if( ( birdBox.y < -DRAGON_HEIGHT ) || ( birdBox.y + DRAGON_HEIGHT > SCREEN_HEIGHT ) || check_collision(birdBox, obs.getCollisionBox(i))){
+                      
             SDL_Delay(500);
             //deletes the obstacle in case the dragon has more lifes
-            obs.coordBox[i].x = -100;
-            obs.coordBox[i].y = -100;
+            obs.remove(i);            
             return true;
         }
     }
@@ -119,11 +117,11 @@ void Bird::show()
     //shows the bird
     //if animation frame > max No of frames, reset animation frame
     if (++nextFrame > (NO_OF_DRAGON_FRAMES-1)) nextFrame = 0;
-    apply_surface( dragonBox.x, dragonBox.y, bird[nextFrame], screen );
+    apply_surface( birdBox.x, birdBox.y, bird[nextFrame], screen );
 }
 
 SDL_Rect& Bird::getCollisionBox(){
-    return dragonBox;
+    return birdBox;
 }
 
 #endif // BIRD_H

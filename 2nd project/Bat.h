@@ -35,12 +35,12 @@ Bat::Bat()
         }
     }
     //Set initial bat position
-    dragonBox.x =1050;
+    birdBox.x =1050;
     SDL_Delay(rand() % SCREEN_HEIGHT);
-    dragonBox.y =rand() % SCREEN_HEIGHT-DRAGON_HEIGHT;
+    birdBox.y =rand() % SCREEN_HEIGHT-DRAGON_HEIGHT;
     //Set the dragon's dimentions
-    dragonBox.w = BAT_WIDTH;
-    dragonBox.h = BAT_HEIGHT;
+    birdBox.w = BAT_WIDTH;
+    birdBox.h = BAT_HEIGHT;
     //Init the velocity
     xVel = 3;
 
@@ -50,16 +50,16 @@ Bat::Bat()
 
 void Bat::moveBird(){
     // Moves Bat inverse than the Dragon
-    dragonBox.y -= Dragon::yVel;
+    birdBox.y -= Dragon::yVel;
     isOnScreen = true;
     //move Bat on X axis
-    dragonBox.x -= xVel;
-    if ((dragonBox.y >= SCREEN_HEIGHT-DRAGON_HEIGHT) || (dragonBox.y <= 0) ) dragonBox.y += Dragon::yVel;
+    birdBox.x -= xVel;
+    if ((birdBox.y >= SCREEN_HEIGHT-DRAGON_HEIGHT) || (birdBox.y <= 0) ) birdBox.y += Dragon::yVel;
 
-    if ( (dragonBox.x <= 0) ) {
-            dragonBox.x = SCREEN_WIDTH-DRAGON_HEIGHT;
+    if ( (birdBox.x <= 0) ) {
+            birdBox.x = SCREEN_WIDTH-DRAGON_HEIGHT;
             isOnScreen = false;
-            dragonBox.y =rand() % SCREEN_HEIGHT-DRAGON_HEIGHT;
+            birdBox.y =rand() % SCREEN_HEIGHT-DRAGON_HEIGHT;
     }
 
 }
@@ -67,7 +67,7 @@ void Bat::moveBird(){
 
 void Bat::batSetY(){
 
-    dragonBox.y =rand() % SCREEN_HEIGHT-DRAGON_HEIGHT;
+    birdBox.y =rand() % SCREEN_HEIGHT-DRAGON_HEIGHT;
 }
 
 #endif // BAT_H

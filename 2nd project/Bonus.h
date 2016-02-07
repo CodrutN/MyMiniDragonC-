@@ -7,13 +7,10 @@ class Bonus : public Obstacle{
             Bonus();
             void setBonus();
             void moveBonus(int);
-            void showBonus();
-            void deleteBonus();
+			void show() override;            		
 
         private:
-            SDL_Surface *obstacles[1]= {nullptr};
-            SDL_Rect box[1];  // the physical box of the Bonus
-
+            SDL_Surface *obstacles[1]= {nullptr};          
 };
 
 Bonus::Bonus(){
@@ -23,38 +20,31 @@ Bonus::Bonus(){
     TTF_CloseFont(font);
 }
 
-void Bonus::deleteBonus(){
 
-        box[0].x = coordBox[0].x = -100;
-        box[0].y = coordBox[0].y = -100;
-}
 void Bonus::setBonus()
 {
-            int levelWidth = background->w - OBS_WIDTH;  // max X coord of an obstacle
-            int randomX;
-            for(int i=0; i < 1; ++i){
+            int levelWidth = background->w - OBS_WIDTH;  // max X coord of an obstacle                         
                 // avoid to generate collision with an obstacle when
                 // the level starts and give the user some time to get used with the new level
-                randomX = rand() % levelWidth;
+				int randomX = rand() % levelWidth;
                 //sets the coordinates for both physical and collision boxes of obstacles
-                box[i].w = coordBox[i].w = OBS_WIDTH;
-                box[i].h = coordBox[i].h = OBS_HEIGHT;
-                box[i].x = coordBox[i].x = randomX;
-                box[i].y = coordBox[i].y = rand() % (SCREEN_HEIGHT-OBS_HEIGHT);
-            }
+                coordBox[0].w = OBS_WIDTH;
+                coordBox[0].h = OBS_HEIGHT;
+                coordBox[0].x = randomX;
+                coordBox[0].y = rand() % (SCREEN_HEIGHT-OBS_HEIGHT);            
 }
 
 void Bonus::moveBonus(int x){
 
-    for(int i=0;i<1;++i){
-                coordBox[i].x -= x;     // moves the obstacle coordinate along with the background
-    }
+    
+                coordBox[0].x -= x;     // moves the obstacle coordinate along with the background
+				   
 }
 
-void Bonus::showBonus(){
+void Bonus::show(){
     //shows the obstacles
-    for(int i=0; i<1; ++i)
-    apply_surface( box[i].x, box[i].y, obstacles[i], background );
+    	
+	apply_surface(coordBox[0].x, coordBox[0].y, obstacles[0], screen );
 }
 
 #endif // BONUS_H

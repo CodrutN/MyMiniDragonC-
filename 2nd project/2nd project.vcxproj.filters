@@ -21,9 +21,6 @@
     <ClCompile Include="timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Bird.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="play.h">
@@ -64,6 +61,9 @@
     </ClInclude>
     <ClInclude Include="Bird.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bonus.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

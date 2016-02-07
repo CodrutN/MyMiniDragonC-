@@ -14,19 +14,19 @@ class Obstacle
 {
     private:
         SDL_Surface *obstacles[NO_OF_OBSTACLES]= {nullptr};    // obstacle's images holder
-        SDL_Rect box[NO_OF_OBSTACLES];  // the physical box of the Obstacle
-        SDL_Surface* loadImage( std::string ); //function to load the obstacles images
-
-    public:
-
+        //SDL_Rect box[NO_OF_OBSTACLES];  // the physical box of the Obstacle
+        SDL_Surface* loadImage( std::string ); //function to load the obstacles images  
+	protected:
         SDL_Rect coordBox[NO_OF_OBSTACLES];  // used to check the collision with obstacles
-
+	public:
         Obstacle();
         ~Obstacle();
 
         void setObstacles();
         void moveObstacles(int);
-        void show();
+        virtual void show();
+		SDL_Rect& getCollisionBox(int);
+		void remove(int);
 
 };
 
@@ -74,10 +74,10 @@ void Obstacle::setObstacles()
                 // the level starts and give the user some time to get used with the new level
                 while ((randomX = rand() % levelWidth) < SCREEN_WIDTH){}
                 //sets the coordinates for both physical and collision boxes of obstacles
-                box[i].w = coordBox[i].w = OBS_WIDTH;
-                box[i].h = coordBox[i].h = OBS_HEIGHT;
-                box[i].x = coordBox[i].x = randomX;
-                box[i].y = coordBox[i].y = rand() % (SCREEN_HEIGHT-OBS_HEIGHT);
+                coordBox[i].w = OBS_WIDTH;
+                coordBox[i].h = OBS_HEIGHT;
+                coordBox[i].x = randomX;
+                coordBox[i].y = rand() % (SCREEN_HEIGHT-OBS_HEIGHT);
             }
 }
 
@@ -91,7 +91,17 @@ void Obstacle::moveObstacles(int x){
 void Obstacle::show(){
     //shows the obstacles
     for(int i=0; i<NO_OF_OBSTACLES; ++i)
-    apply_surface( box[i].x, box[i].y, obstacles[i], background );
+    apply_surface(coordBox[i].x, coordBox[i].y, obstacles[i], screen );
+}
+
+void Obstacle::remove(int i) {
+
+	coordBox[i].x = -100;
+	coordBox[i].y = -100;
+}
+
+SDL_Rect& Obstacle::getCollisionBox(int i) {
+	return coordBox[i];
 }
 
 // LOADING OBSTACLE IMAGE & SETTING TRANSPARENCY

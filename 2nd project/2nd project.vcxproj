@@ -128,13 +128,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Bird.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bat.h" />
     <ClInclude Include="Bird.h" />
+    <ClInclude Include="Bonus.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="dragon.h" />
     <ClInclude Include="game_functions.h" />

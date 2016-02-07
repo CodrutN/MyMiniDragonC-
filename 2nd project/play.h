@@ -176,7 +176,7 @@ void play(){
         // shows the obstacles
         obs.show();
         //shows bonus
-        bonus.showBonus();
+        bonus.show();
         //there is 1/1000 chances for the bat to show up
         int randomGen = rand() % 1000;
         //if there is at least 1 bat on the screen then show it
@@ -195,15 +195,11 @@ void play(){
             }
         }
         //bonus life?
-        if (check_collision(bonus.coordBox[0], myDragon.getCollisionBox())){
-                        myDragon.setLives(1);
-                        int xx = bonus.coordBox[0].x;
-                        int yy = bonus.coordBox[0].y;
-                        apply_surface( xx, yy, background, screen, &bonus.coordBox[0] );
-                        SDL_UpdateWindowSurface(gameWindow);
+        if (check_collision(bonus.getCollisionBox(0), myDragon.getCollisionBox())){
+                        myDragon.setLives(1);                        
                         SDL_Delay(500);
                         //apply_surface(bonus.x,clip.y,highscoreImg,screen,&clip);
-                        bonus.deleteBonus();
+                        bonus.remove(0);
                 }
         // moves & shows the dragon on the screen
         myDragon.moveBird();
