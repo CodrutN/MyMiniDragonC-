@@ -24,8 +24,9 @@ misrepresented as being the original software.
 
 #include "constants.h"
 #include "variables.h"
-#include "loader.h"
+using namespace myVar;
 
+#include "loader.h"
 #include "window.h"
 #include "game_functions.h"
 #include "play.h"

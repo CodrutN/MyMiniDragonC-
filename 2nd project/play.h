@@ -4,6 +4,22 @@
 
 #include "Bonus.h"
 
+SDL_Surface* loadLevel(int level) {
+	SDL_Surface* currentOrNextBackground;
+	if (level >= NO_OF_LEVELS) level = NO_OF_LEVELS - 1;
+	std::ostringstream ss;          //stores the level filename
+	ss.clear();
+	ss.str("");
+	ss << IMG_PATH << "bg_lvl" << level << ".png";
+	//Load the background image
+	currentOrNextBackground = load_image(ss.str());
+	//If there was a problem loading the background
+	if (currentOrNextBackground == nullptr) {
+		printf("\nUnable to load the background image:  %s\n", IMG_GetError());
+		
+	}
+	return currentOrNextBackground;
+}
 
 void play(){
     // init srand to generate random numbers used for obstacles
@@ -20,15 +36,17 @@ void play(){
 
     //Load the files
     if( !load_files() ) return;
+	nextBackground = loadLevel(++level);
+	--level;
 
     Dragon myDragon;        //CREATING DRAGON CLASS OBJECT
 
 
     Bat bats[3];
-    //std::vector <Bat> bats;
+    
     for (int i = 0; i<3; ++i){
         bats[i] =  Bat();
-        //bats.push_back(Bat());
+        
     }
 
     Timer fps;               //CREATING TIMER CLASS OBJECT
@@ -132,32 +150,26 @@ void play(){
             myDragon.set_score(50*level);
             // check win condition
             if (level < NO_OF_LEVELS){
-                std::ostringstream ss;          //stores the level filename
-                ss.clear();
-                ss.str("");
-                ss << IMG_PATH << "bg_lvl" << level << ".png";
-                    //Load the background image
-                background = load_image( ss.str());
-                //If there was a problem loading the background
-                if( background == nullptr ){
-                    printf("\nUnable to load the background image:  %s\n", IMG_GetError());
-                    return;
-                }
-            //sets bonus life
-            bonus.setBonus();
-            //shows level no and sets a small delay
-            ss.clear();
-            ss.str("");
-            ss << "LEVEL " << level+1;
-            apply_surface( bgX, bgY, background, screen );
-            showTextAtPosition( "theHardwayRMX.ttf", 36, { 0xFF, 0x0, 0xFF }, SCREEN_WIDTH/2 - 100, SCREEN_HEIGHT/2-100, ss.str() );
-            //sets new obstacles with new coordinates
-            obs.setObstacles();
-            //show dragon
-            myDragon.show();
-            SDL_UpdateWindowSurface(gameWindow);
-            //delay to prepare the user for next level
-            SDL_Delay(1500);
+				//load next level
+				background = loadLevel(level);
+				nextBackground = loadLevel(++level);				
+				//sets bonus life
+				bonus.setBonus();
+				//shows level no and sets a small delay
+				std::ostringstream sLevel;
+				sLevel.clear();
+				sLevel.str("");
+				sLevel << "LEVEL " << level;
+				--level;
+				apply_surface( bgX, bgY, background, screen );
+				showTextAtPosition( "theHardwayRMX.ttf", 36, { 0xFF, 0x0, 0xFF }, SCREEN_WIDTH/2 - 100, SCREEN_HEIGHT/2-100, sLevel.str() );
+				//sets new obstacles with new coordinates
+				obs.setObstacles();
+				//show dragon
+				myDragon.show();
+				SDL_UpdateWindowSurface(gameWindow);
+				//delay to prepare the user for next level
+				SDL_Delay(1500);
             } else {
                     //win situation - end of levels
                     quit = true;
@@ -171,13 +183,13 @@ void play(){
 
         // rolls the background
         apply_surface( bgX, bgY, background, screen );
-        // concatenates the background to create the effect of moving when the width is less then screen size
-        apply_surface( bgX + background->w, bgY, background, screen );
+        // concatenates the background with next level bacground to create the effect of moving when the width is less then screen size
+        apply_surface( bgX + background->w, bgY, nextBackground, screen );
         // shows the obstacles
         obs.show();
         //shows bonus
         bonus.show();
-        //there is 1/1000 chances for the bat to show up
+        //there is 1/1000 chances for the bats to show up
         int randomGen = rand() % 1000;
         //if there is at least 1 bat on the screen then show it
         if (randomGen == 1 || bats[0].isOnScreen){
