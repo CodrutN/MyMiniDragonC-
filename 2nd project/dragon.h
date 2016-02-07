@@ -40,11 +40,11 @@ Dragon::Dragon()
         }
     }
     //Set initial dragon position
-    dragonBox.x =350;
-    dragonBox.y =350;
+    birdBox.x =350;
+    birdBox.y =350;
     //Set the dragon's dimentions
-    dragonBox.w = DRAGON_WIDTH;
-    dragonBox.h = DRAGON_HEIGHT;
+    birdBox.w = DRAGON_WIDTH;
+    birdBox.h = DRAGON_HEIGHT;
     //Init the velocity
 
     xVel = 0;
@@ -66,7 +66,7 @@ Dragon::~Dragon(){
 
 void Dragon::moveBird(){
     // Moves the dragon up or down
-    dragonBox.y += Dragon::yVel;
+    birdBox.y += Dragon::yVel;
 }
 
 int Dragon::getLives(){
